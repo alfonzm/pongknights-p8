@@ -1,5 +1,6 @@
 function _init()
     grav = 0
+    timer = 0
 
     p = {
         x = 63,
@@ -11,8 +12,8 @@ function _init()
         my = 0,
         w = 4,
         h = 8,
-        colW = 10,
-        colH = 10,
+        colW = 12,
+        colH = 12,
     }
 
     pdl = false
@@ -20,11 +21,20 @@ function _init()
     eBulls = {}
 
     bullSpd = 2
-    add(eBulls, {x=0, y=63+2, dx=1, dy = 0, w=2, h=2})
-    add(eBulls, {x=127, y=0, dx=-1, dy = 1, w=2, h=2})
+
 end
 
 function _update()
+    timer = timer + 1
+
+    if timer % 20 == 0 then
+        local by = flr(rnd(127))
+        add(eBulls, {x=0, y=by, dx=1, dy = 0, w=2, h=2})
+
+        local bx = flr(rnd(127))
+        add(eBulls, {x=bx, y=0, dx=-1, dy = 1, w=2, h=2})
+    end
+
     p.mx, p.my = 0, 0
 
     if btn(1) then
@@ -78,7 +88,7 @@ function hitPlayer(a,b)
 end
 
 function _draw()
-    cls()
+    cls(1)
     spr(1,p.x,p.y)
 
     if pdl then
@@ -95,6 +105,9 @@ function _draw()
     end
 
     for b in all(eBulls) do
-        rectfill(b.x, b.y, b.x+2, b.y+2, 7)
+        spr(2, b.x,b.y)
+        -- rectfill(b.x, b.y, b.x+2, b.y+2, 7)
     end
+
+    print(timer, 1, 1)
 end
