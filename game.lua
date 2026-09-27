@@ -2,7 +2,7 @@ function _init()
     grav = 0
     timer = 0
 
-    p = {
+    player = {
         x = 63,
         y = 63,
         spd = 3,
@@ -31,32 +31,36 @@ function _update()
         local by = flr(rnd(127))
         local dx = rnd(2) < 1 and -1 or 1
         local bx = dx == -1 and 128 or 0
-        add(eBulls, {x=bx, y=by, dx=dx, dy = 0, w=2, h=2})
+        add(eBulls, {
+            x=bx, y=by, dx=dx, dy=0,
+            colOx=2, colOy=2, colW=4, colH=4,
+        })
     end
 
-    p.mx, p.my = 0, 0
+    player.mx, player.my = 0, 0
 
     if btn(1) then
-        p.dx = 1
-        p.mx = 1
+        player.dx = 1
+        player.mx = 1
     elseif btn(0) then
-        p.dx = -1
-        p.mx = -1
+        player.dx = -1
+        player.mx = -1
     end
 
+    player.dy = 0
     if btn(3) then
-        p.dy = 1
-        p.my = 1
+        player.dy = 1
+        player.my = 1
     elseif btn(2) then
-        p.dy = -1
-        p.my = -1
+        player.dy = -1
+        player.my = -1
     end
 
-    local len = sqrt(p.mx*p.mx+p.my*p.my)
+    local len = sqrt(player.mx*player.mx+player.my*player.my)
 
     if len > 0 and not pdl then
-        p.x += p.mx/len*p.spd
-        p.y += p.my/len*p.spd
+        player.x += player.mx/len*player.spd
+        player.y += player.my/len*player.spd
     end
 
     pdl = (btn(5)) and true or false
@@ -68,39 +72,93 @@ function _update()
             del(eBulls, b)
         end
 
-        if hitPlayer(p,b) and b.bounced ~= 1 then
-            if pdl then
-                b.dx = b.dx * -1
-                b.dy = b.dy * -1
-                b.bounced = 1
-            end
+        if b.bounced ~= 1 and pdl and collidingPaddle(b) then
+            b.dx = b.dx * -1
+            b.dy = b.dy * -1
+            b.bounced = 1
+        end
+
+        if colliding(player, b) then
             -- del(eBulls, b)
         end
+
     end
 end
 
-function hitPlayer(a,b)
-    return a.x-a.colW/2 < b.x+b.w
-        and a.x+a.colW > b.x
-        and a.y-a.colH/2 < b.y+b.h
-        and a.y+a.colH > b.y
+function bulletAabb(b)
+    local x1 = b.x + b.colOx
+    local y1 = b.y + b.colOy
+    return x1, y1, x1 + b.colW, y1 + b.colH
+end
+
+function colliding(a,b)
+    local bx1, by1, bx2, by2 = bulletAabb(b)
+    return checkAabb(
+        a.x-a.colW/2,
+        a.y-a.colH/2,
+        a.x+a.colW,
+        a.y+a.colH,
+        bx1, by1, bx2, by2
+    )
+end
+
+function collidingPaddle(b)
+    local px, py, px2, py2 = getPaddleRect()
+    local bx1, by1, bx2, by2 = bulletAabb(b)
+    return checkAabb(px, py, px2+1, py2+1, bx1, by1, bx2, by2)
+end
+
+function checkAabb(ax1,ay1,ax2,ay2,bx1,by1,bx2,by2)
+    return ax1 < bx2
+        and ax2 > bx1
+        and ay1 < by2
+        and ay2 > by1
+end
+
+function getPaddleRect()
+    padWidth = 1
+    padHeight = 14
+
+    padGap = 3
+    padDist = 8/2 + padGap
+
+    pCenterX = player.x + 8/2
+    pCenterY = player.y + 8/2
+
+    -- padx left or right of player
+    padX = player.dx == 1 and (pCenterX + padDist) or (pCenterX - padDist - padWidth - 1)
+    padX2 = padX + padWidth
+
+    padY = pCenterY - padHeight/2
+    padY2 = pCenterY + padHeight/2-1
+
+    if player.dy ~= 0 then
+        padX = pCenterX - padHeight/2
+        padX2 = padX + padHeight - 1
+    end
+
+    if player.dy == -1 then
+        padY = pCenterY - padDist - padWidth - 1
+        padY2 = padY + padWidth
+    elseif player.dy == 1 then
+        padY = pCenterY + padDist
+        padY2 = padY + padWidth
+    end
+
+    return padX, padY, padX2, padY2
 end
 
 function _draw()
     cls(1)
-    spr(1,p.x,p.y)
+
+    -- player
+    spr(1,player.x,player.y)
 
     if pdl then
-        pCenterX = p.x + p.w/2
-        padW = 1
-        padDist = p.w/2
 
-        padX = p.dx == 1 and (pCenterX + padDist + 4) or (pCenterX - padDist - 2)
+        local padX, padY, padX2, padY2 = getPaddleRect()
 
-        pCenterY = p.y + p.h/2
-        padY = p.dy + p.h/2
-
-        rectfill(padX, p.y+p.h/2-p.h/2-1, padX+padW, p.y+p.h/2 - p.h/2 + p.h, 7)
+        rectfill(padX, padY, padX2, padY2, 7)
     end
 
     for b in all(eBulls) do
