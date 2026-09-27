@@ -29,10 +29,9 @@ function _update()
 
     if timer % 20 == 0 then
         local by = flr(rnd(127))
-        add(eBulls, {x=0, y=by, dx=1, dy = 0, w=2, h=2})
-
-        local bx = flr(rnd(127))
-        add(eBulls, {x=bx, y=0, dx=-1, dy = 1, w=2, h=2})
+        local dx = rnd(2) < 1 and -1 or 1
+        local bx = dx == -1 and 128 or 0
+        add(eBulls, {x=bx, y=by, dx=dx, dy = 0, w=2, h=2})
     end
 
     p.mx, p.my = 0, 0
@@ -106,8 +105,5 @@ function _draw()
 
     for b in all(eBulls) do
         spr(2, b.x,b.y)
-        -- rectfill(b.x, b.y, b.x+2, b.y+2, 7)
     end
-
-    print(timer, 1, 1)
 end
