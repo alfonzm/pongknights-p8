@@ -117,9 +117,9 @@ end
 
 function getPaddleRect()
     padWidth = 1
-    padHeight = 14
+    padHeight = 10
 
-    padGap = 3
+    padGap = 2
     padDist = 8/2 + padGap
 
     pCenterX = player.x + 8/2
