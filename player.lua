@@ -1,4 +1,6 @@
 player = gameobject:new({
+    x = 63,
+    y = 63,
     spd = 3,
     dx = 0,
     dy = 0,
@@ -34,6 +36,16 @@ player = gameobject:new({
         if len > 0 and not pdl then
             self.x += self.mx/len*self.spd
             self.y += self.my/len*self.spd
+        end
+    end,
+
+    draw = function(self)
+        spr(1,player.x,player.y)
+
+        if pdl then
+            local padX, padY, padX2, padY2 = getPaddleRect()
+
+            rectfill(padX, padY, padX2, padY2, 7)
         end
     end
 })

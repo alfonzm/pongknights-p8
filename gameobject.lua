@@ -10,8 +10,8 @@ local class = {
 }
 
 gameobject = class:new({
-    x = 63,
-    y = 63,
+    x = 0,
+    y = 0,
     update = function() end,
     draw = function() end,
 })

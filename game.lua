@@ -7,7 +7,6 @@ function _init()
     eBulls = {}
 
     bullSpd = 2
-
 end
 
 function _update()
@@ -113,15 +112,7 @@ end
 function _draw()
     cls(1)
 
-    -- player
-    spr(1,player.x,player.y)
-
-    if pdl then
-
-        local padX, padY, padX2, padY2 = getPaddleRect()
-
-        rectfill(padX, padY, padX2, padY2, 7)
-    end
+    player:draw()
 
     for b in all(eBulls) do
         spr(2, b.x,b.y)
