@@ -4,9 +4,7 @@ function _init()
 
     pdl = false
 
-    eBulls = {}
-
-    bullSpd = 2
+    bullets = {}
 end
 
 function _update()
@@ -16,33 +14,19 @@ function _update()
         local by = flr(rnd(127))
         local dx = rnd(2) < 1 and -1 or 1
         local bx = dx == -1 and 128 or 0
-        add(eBulls, {
-            x=bx, y=by, dx=dx, dy=0,
-            colOx=2, colOy=2, colW=4, colH=4,
-        })
+        add(bullets, bullet:new({
+            x = bx,
+            y = by,
+            dx = dx,
+        }))
     end
 
     player:update()
 
     pdl = (btn(5)) and true or false
 
-    for b in all(eBulls) do
-        b.x = b.x + (b.dx * bullSpd)
-        b.y = b.y + (b.dy * bullSpd)
-        if b.x < -20 or b.x > 127 + 20 or b.y < -20 or b.y > 127 + 20 then
-            del(eBulls, b)
-        end
-
-        if b.bounced ~= 1 and pdl and collidingPaddle(b) then
-            b.dx = b.dx * -1
-            b.dy = b.dy * -1
-            b.bounced = 1
-        end
-
-        if colliding(player, b) then
-            -- del(eBulls, b)
-        end
-
+    for b in all(bullets) do
+        b:update()
     end
 end
 
@@ -114,7 +98,7 @@ function _draw()
 
     player:draw()
 
-    for b in all(eBulls) do
-        spr(2, b.x,b.y)
+    for b in all(bullets) do
+        b:draw()
     end
 end

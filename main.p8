@@ -3,6 +3,7 @@ version 43
 __lua__
 #include gameobject.lua
 #include player.lua
+#include bullet.lua
 #include game.lua
 
 __gfx__
