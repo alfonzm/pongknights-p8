@@ -10,7 +10,7 @@ bullet = gameobject:new({
         self.x = self.x + (self.dx * bullSpd)
         self.y = self.y + (self.dy * bullSpd)
         if self.x < -20 or self.x > 127 + 20 or self.y < -20 or self.y > 127 + 20 then
-            del(bullets, self)
+            del(entities, self)
         end
 
         if self.bounced ~= 1 and pdl and collidingPaddle(self) then

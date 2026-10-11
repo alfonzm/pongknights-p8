@@ -4,7 +4,9 @@ function _init()
 
     pdl = false
 
-    bullets = {}
+    entities = {}
+
+    add(entities, player)
 end
 
 function _update()
@@ -14,19 +16,17 @@ function _update()
         local by = flr(rnd(127))
         local dx = rnd(2) < 1 and -1 or 1
         local bx = dx == -1 and 128 or 0
-        add(bullets, bullet:new({
+        add(entities, bullet:new({
             x = bx,
             y = by,
             dx = dx,
         }))
     end
 
-    player:update()
-
     pdl = (btn(5)) and true or false
 
-    for b in all(bullets) do
-        b:update()
+    for e in all(entities) do
+        e:update()
     end
 end
 
@@ -96,9 +96,7 @@ end
 function _draw()
     cls(1)
 
-    player:draw()
-
-    for b in all(bullets) do
-        b:draw()
+    for e in all(entities) do
+        e:draw()
     end
 end
