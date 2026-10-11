@@ -1,4 +1,4 @@
-gameobject = {
+local class = {
     new = function(self, tbl)
         tbl = tbl or {}
         setmetatable(tbl, {
@@ -8,3 +8,10 @@ gameobject = {
         return tbl
     end
 }
+
+gameobject = class:new({
+    x = 63,
+    y = 63,
+    update = function() end,
+    draw = function() end,
+})

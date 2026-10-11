@@ -2,20 +2,6 @@ function _init()
     grav = 0
     timer = 0
 
-    player = {
-        x = 63,
-        y = 63,
-        spd = 3,
-        dx = 0,
-        dy = 0,
-        mx = 0,
-        my = 0,
-        w = 4,
-        h = 8,
-        colW = 12,
-        colH = 12,
-    }
-
     pdl = false
 
     eBulls = {}
@@ -37,31 +23,7 @@ function _update()
         })
     end
 
-    player.mx, player.my = 0, 0
-
-    if btn(1) then
-        player.dx = 1
-        player.mx = 1
-    elseif btn(0) then
-        player.dx = -1
-        player.mx = -1
-    end
-
-    player.dy = 0
-    if btn(3) then
-        player.dy = 1
-        player.my = 1
-    elseif btn(2) then
-        player.dy = -1
-        player.my = -1
-    end
-
-    local len = sqrt(player.mx*player.mx+player.my*player.my)
-
-    if len > 0 and not pdl then
-        player.x += player.mx/len*player.spd
-        player.y += player.my/len*player.spd
-    end
+    player:update()
 
     pdl = (btn(5)) and true or false
 
