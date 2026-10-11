@@ -1,9 +1,11 @@
 bullet = gameobject:new({
     dy = 0,
-    colOx=2,
-    colOy=2,
-    colW=4,
-    colH=4,
+    collider = {
+        ox = 2,
+        oy = 2,
+        w = 4,
+        h = 4,
+    },
 
     update = function(self)
         local bullSpd = 2
