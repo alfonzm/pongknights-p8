@@ -1,34 +1,26 @@
 player = gameobject:new({
     x = 63,
     y = 63,
-    w = 4,
-    h = 8,
-    spd = 3,
+    spd = 2,
     dx = 0,
     dy = 0,
 
     collider = {
-        ox = -6,
-        oy = -6,
-        w = 18,
-        h = 18,
+        ox = 0,
+        oy = 0,
+        w = 8,
+        h = 8,
     },
 
     update = function(self)
-        local mx, my = 0, 0
-
+        self.dx = 0
         self.dy = gravity
 
         if btn(1) then
             self.dx = 1
-            mx = 1
         elseif btn(0) then
             self.dx = -1
-            mx = -1
         end
-
-        -- gravity
-        my = self.dy
 
         -- move up/down (topdown)
         -- if btn(3) then
@@ -39,12 +31,26 @@ player = gameobject:new({
         --     my = -1
         -- end
 
-        local len = sqrt(mx * mx + my * my)
+        -- -- topdown movement
+        -- local len = sqrt(mx * mx + my * my)
+        -- if len > 0 and not pdl then
+        --     self.x += mx / len * self.spd
+        --     self.y += my / len * self.spd
+        -- end
 
-        if len > 0 and not pdl then
-            self.x += mx / len * self.spd
-            self.y += my / len * self.spd
+        local mx = self.dx * self.spd
+        local my = self.dy
+
+        if isCollidingTile(self, mx, 0) then
+            mx = 0
         end
+        if isCollidingTile(self, 0, my) then
+            my = 0
+            self.dy = 0
+        end
+
+        self.x += mx
+        self.y += my
     end,
 
     draw = function(self)

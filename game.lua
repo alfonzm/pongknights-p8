@@ -1,5 +1,5 @@
 function _init()
-    gravity = 3
+    gravity = 1
     timer = 0
 
     pdl = false
@@ -9,7 +9,7 @@ function _init()
     add(entities, player)
 end
 
-function _update()
+function _update60()
     timer = timer + 1
 
     if timer % 20 == 0 then
@@ -35,8 +35,22 @@ function collidingPaddle(b)
     return b:intersectsRect(px, py, px2 + 1, py2 + 1)
 end
 
-function isSolid(tx, ty)
-    return fget(mget(tx, ty), 0)
+-- px, py are pixel coordinates
+function isSolid(px, py)
+    return fget(mget(px \ 8, py \ 8), 0)
+end
+
+-- dx, dy = how many pixels the aabb would move
+function isCollidingTile(obj, dx, dy)
+    local x1, y1, x2, y2 = obj:getAabb()
+    x1 += dx
+    y1 += dy
+    x2 += dx
+    y2 += dy
+    return isSolid(x1, y1)
+        or isSolid(x2 - 1, y1)
+        or isSolid(x1, y2 - 1)
+        or isSolid(x2 - 1, y2 - 1)
 end
 
 function _draw()
