@@ -1,5 +1,5 @@
 function _init()
-    grav = 0
+    gravity = 3
     timer = 0
 
     pdl = false
@@ -33,6 +33,10 @@ end
 function collidingPaddle(b)
     local px, py, px2, py2 = player:getPaddleRect()
     return b:intersectsRect(px, py, px2 + 1, py2 + 1)
+end
+
+function isSolid(tx, ty)
+    return fget(mget(tx, ty), 0)
 end
 
 function _draw()

@@ -17,6 +17,8 @@ player = gameobject:new({
     update = function(self)
         local mx, my = 0, 0
 
+        self.dy = gravity
+
         if btn(1) then
             self.dx = 1
             mx = 1
@@ -25,14 +27,17 @@ player = gameobject:new({
             mx = -1
         end
 
-        self.dy = 0
-        if btn(3) then
-            self.dy = 1
-            my = 1
-        elseif btn(2) then
-            self.dy = -1
-            my = -1
-        end
+        -- gravity
+        my = self.dy
+
+        -- move up/down (topdown)
+        -- if btn(3) then
+        --     self.dy = 1
+        --     my = 1
+        -- elseif btn(2) then
+        --     self.dy = -1
+        --     my = -1
+        -- end
 
         local len = sqrt(mx * mx + my * my)
 
