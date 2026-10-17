@@ -30,15 +30,13 @@ gameobject = class:new({
         return x1, y1, x1 + c.w, y1 + c.h
     end,
 
-    intersects = function(self, other)
-        local ax1, ay1, ax2, ay2 = self:getAabb()
-        local bx1, by1, bx2, by2 = other:getAabb()
-        return overlap_aabb(ax1, ay1, ax2, ay2, bx1, by1, bx2, by2)
-    end,
-
     intersectsRect = function(self, x1, y1, x2, y2)
         local ax1, ay1, ax2, ay2 = self:getAabb()
         return overlap_aabb(ax1, ay1, ax2, ay2, x1, y1, x2, y2)
+    end,
+
+    intersects = function(self, other)
+        return self:intersectsRect(other:getAabb())
     end,
 
     update = function(self) end,
