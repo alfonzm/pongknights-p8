@@ -53,6 +53,27 @@ function isCollidingTile(obj, dx, dy)
         or isSolid(x2 - 1, y2 - 1)
 end
 
+function moveTileX(obj, dx)
+    for i = 1, abs(dx) do
+        local s = sgn(dx)
+        if isCollidingTile(obj, s, 0) then
+            break
+        end
+        obj.x += s
+    end
+end
+
+function moveTileY(obj, dy)
+    for i = 1, abs(dy) do
+        local s = sgn(dy)
+        if isCollidingTile(obj, 0, s) then
+            return false
+        end
+        obj.y += s
+    end
+    return true
+end
+
 function _draw()
     cls(0)
 

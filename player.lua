@@ -41,16 +41,10 @@ player = gameobject:new({
         local mx = self.dx * self.spd
         local my = self.dy
 
-        if isCollidingTile(self, mx, 0) then
-            mx = 0
-        end
-        if isCollidingTile(self, 0, my) then
-            my = 0
+        moveTileX(self, mx)
+        if not moveTileY(self, my) then
             self.dy = 0
         end
-
-        self.x += mx
-        self.y += my
     end,
 
     draw = function(self)
