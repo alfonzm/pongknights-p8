@@ -36,7 +36,9 @@ function collidingPaddle(b)
 end
 
 function _draw()
-    cls(1)
+    cls(0)
+
+    map(0,0)
 
     for e in all(entities) do
         e:draw()

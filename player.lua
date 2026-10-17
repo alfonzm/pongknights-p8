@@ -43,7 +43,7 @@ player = gameobject:new({
     end,
 
     draw = function(self)
-        spr(1, self.x, self.y)
+        spr(3, self.x, self.y)
 
         if pdl then
             local padX, padY, padX2, padY2 = self:getPaddleRect()
